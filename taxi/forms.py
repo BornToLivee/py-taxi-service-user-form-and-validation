@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from taxi.models import Driver, Car
 
 
-class DriverForm(UserCreationForm):
+class DriverCreationForm(UserCreationForm):
     class Meta:
         model = Driver
         fields = UserCreationForm.Meta.fields + (
@@ -29,17 +29,13 @@ class DriverLicenseUpdateForm(forms.ModelForm):
             raise ValidationError(
                 "License number should be 8 characters long"
             )
-        if not license_number[:3].isupper():
+        if not (license_number[:3].isupper() and license_number[:3].isalpha()):
             raise ValidationError(
                 "First three license number characters should be upper case"
             )
         if not license_number[3:].isdigit():
             raise ValidationError(
                 "Last five license number should be digits only"
-            )
-        if not license_number[:3].isalpha():
-            raise ValidationError(
-                "First three license number characters should be letters only"
             )
         return license_number
 
